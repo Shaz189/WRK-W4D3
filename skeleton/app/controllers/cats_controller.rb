@@ -1,4 +1,7 @@
 class CatsController < ApplicationController
+  before_action :ensure_logged_in, except: [:index, :show]
+  before_action :current_user_cats, only: [:edit, :update]
+  
   def index
     @cats = Cat.all
     render :index
@@ -16,6 +19,7 @@ class CatsController < ApplicationController
 
   def create
     @cat = Cat.new(cat_params)
+    @cat.owner_id = current_user.id
     if @cat.save
       redirect_to cat_url(@cat)
     else
@@ -44,4 +48,6 @@ class CatsController < ApplicationController
   def cat_params
     params.require(:cat).permit(:age, :birth_date, :color, :description, :name, :sex)
   end
+  
+
 end

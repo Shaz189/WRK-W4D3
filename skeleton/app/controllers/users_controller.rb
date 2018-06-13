@@ -12,6 +12,7 @@ class UsersController < ApplicationController
     else 
       @user = User.new(user_params)
       if @user.save
+        log_in!(@user)
         redirect_to cats_url
       else 
         redirect_to new_user_url

@@ -5,19 +5,22 @@ class SessionsController < ApplicationController
     render :new
   end
   
-  def create 
-    user = User.find_by_credentials(user_params)
+  def create
+    user = User.find_by_credentials(params[:user][:username], params[:user][:password])
+    debugger
     if user 
+      debugger
       log_in!(user)
-      render root_url
+      redirect_to cats_url
     else 
+      debugger
       redirect_to new_session_url
     end
   end 
   
   def destroy 
     log_out!(current_user)
-    redirect_to root_url
+    redirect_to cats_url
   end
   
 end

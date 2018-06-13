@@ -30,6 +30,7 @@ class User < ApplicationRecord
     user = User.find_by(username: username)
     return nil if user.nil?
     return nil unless user.is_password?(password)
+    user
   end 
   
   def self.generate_session_token

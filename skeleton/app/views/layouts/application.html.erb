@@ -11,6 +11,10 @@
   <body>
     <% if logged_in? %>
     <%= current_user %>
+    <form class="" action=" <%= session_url %> " method="post">
+      <input type="hidden" name="_method" value="delete">
+      <input type="submit" name="" value="log out">
+    </form>
     <% else %>
     <a href="<%= new_session_url %>">Login</a>
     <% end %>
