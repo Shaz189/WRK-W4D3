@@ -9,6 +9,11 @@
   </head>
 
   <body>
+    <% if logged_in? %>
+    <%= current_user %>
+    <% else %>
+    <a href="<%= new_session_url %>">Login</a>
+    <% end %>
     <%= yield %>
   </body>
 </html>

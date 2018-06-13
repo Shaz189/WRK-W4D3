@@ -5,19 +5,29 @@ class UsersController < ApplicationController
   end
   
   def create 
-    user = User.find_by_credentials(user_params)
-    if user 
+    # debugger
+    @user = User.find_by_credentials(user_params[:username], user_params[:password])
+    if @user 
      redirect_to new_session_url
     else 
-      user = User.new(user_params)
-      if user.save
-        # render :
+      @user = User.new(user_params)
+      if @user.save
+        redirect_to cats_url
+      else 
+        redirect_to new_user_url
       end
     end
   end    
   
+  
   private
+  
+  def password(password)
+    @password = password
+    self.password_digest = BCrypt::Password.create(password)
+  end
+  
   def user_params
-    params.require(:user).permit(:username, :password)
+    params.require(:users).permit(:username, :password)
   end 
 end

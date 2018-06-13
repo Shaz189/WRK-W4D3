@@ -15,7 +15,7 @@ class User < ApplicationRecord
   validates :username, presence: true, uniqueness: true
   validates :session_token, presence: true, uniqueness: true
   validates :password_digest, presence: true
-  validates :password, length { minimum: 6 }, allow_nil: true
+  validates :password, length: { minimum: 6 }, allow_nil: true
   
   has_many :cats,
     foreign_key: :owner_id,
@@ -23,14 +23,21 @@ class User < ApplicationRecord
   
   has_many :cat_rental_requests
   
+  attr_reader :password
+  after_initialize :ensure_session_token
+  
   def self.find_by_credentials(username, password)
-    use = User.find_by(username: username)
+    user = User.find_by(username: username)
     return nil if user.nil?
-    return nil unless user.is_password?
+    return nil unless user.is_password?(password)
   end 
   
   def self.generate_session_token
-    SecureRandom::urlsafe_base64
+    SecureRandom::urlsafe_base64(16)
+  end
+  
+  def ensure_session_token
+    self.session_token ||= self.class.generate_session_token
   end
   
   def is_password?(password)
